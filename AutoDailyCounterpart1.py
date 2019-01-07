@@ -18,10 +18,10 @@ presentAccountNumber = 0 # 当前切到了哪个号， 0 表示有问题
 
 # @Global variable
 
-autoInvokeList = [1, 6]
+autoInvokeList = [1, 2, 3, 4, 5, 6]
 
 # lvl no less than 58
-clubShopMemberList = [1, 6, 3, 5, 2, 19, 8, 13, 7, 4, 11, 10]
+clubShopMemberList = [1, 2, 3, 4, 5, 6, 7, 8]
 
 def setNO(no):
 	global NO
@@ -33,7 +33,8 @@ def getNO():
 	global NO
 	return NO
 
-
+# 记录每天已经完成任务的号
+account_done_mission = [1, 3, 6, ]
 
 devices = 0 #devices = 0 # 0 - Mobile ; 1 - Simulator
 
@@ -277,7 +278,8 @@ def autoDailyCounterpartRun():
 
 def autoDinner():
 	# 福利
-	click(1482, 170)
+	# click(1482, 170) # 如果有类似元旦活动的时候，用这个
+	click(1647, 170)
 	sleep(4)
 
 	# Dinner
@@ -511,7 +513,8 @@ def autoFuli():
 	'''
 
 	# 福利
-	click(1482, 170)
+	# click(1482, 170) # 如果有类似元旦活动的时候，用这个
+	click(1647, 170)
 	sleep(4)
 
 
@@ -629,7 +632,7 @@ class Adventure(object):
 	def applyAuto2DailyMission(self):
 		self.enter2DailyMission()
 		# 分日期, 1、3、5、7 已确定
-		if int(time.strftime("%w")) in [1, 3, 5, 7]:
+		if int(time.strftime("%w")) in [1, 3, 5, 0]:
 			# 突破丹、宝物精炼石、装备精炼石
 			self.breakthrough()
 
@@ -637,7 +640,7 @@ class Adventure(object):
 
 			self.weaponRefiningStone()
 
-		if int(time.strftime("%w")) in [2, 4, 6, 7]:
+		if int(time.strftime("%w")) in [2, 4, 6, 0]:
 			# 武将经验、宝物经验、神兵进阶
 			self.heroExp()
 
@@ -848,13 +851,16 @@ def autoDailyBonus():
 
 def autoCollectRedPiecesForOneTime():
 	# Enter 活动
-	click(1650, 168)
+	# click(1650, 168) # 如果有类似元旦活动，点这个
+	click(1815, 168)
 	sleep(4)
 
 	# 军团活跃点多几次
-	# for i in range(1, 4):
-	# 	click(245, 375)
-	# 	sleep(0.5)
+	# Reference
+	# 1 - 5 行 Y 轴 : 230 375 515 655 800
+	for i in range(1, 4):
+		click(245, 655)
+		sleep(0.5)
 
 	# collect
 	for i in range(1, 4):
@@ -893,7 +899,7 @@ def yuandan():
 def autoCollectRedPieces():
 	autoCollectRedPiecesForOneTime()
 	autoCollectRedPiecesForOneTime()
-	yuandan()
+	# yuandan()
 
 def autoInvoke(acc):
 	global autoInvokeList
@@ -966,6 +972,8 @@ def autoCollectClubBonus():
 	sleep(4)
 
 def autoCollectEmail():
+	if presentAccountNumber == 1:
+		return
 	# 更多
 	click(98, 428)
 	sleep(2)
@@ -1047,16 +1055,18 @@ def main():
 	# autoCollectRedPieces()
 
 	# 临时
-	#'''
+	'''
 	#switchAccount(7)
-	# for i in range(1, 20):
-	#  	autoNormalBattle() 
-	#'''
+	for i in range(1, 8):
+	 	autoNormalBattle() 
+	'''
 	# 临时
 	'''
 	for i in range(x, y):
 		# if i != 1:
 		switchAccount(i)
+
+		# autoDailyMission()
 
 		print("开始自动宴会")
 		autoDinner()
@@ -1065,15 +1075,20 @@ def main():
 	# autoLand()
 
 	# 早
-	'''
+	# '''
 	for i in range(x, y):
+		if i in [3, 4,5,6]:
+			continue
 		switchAccount(i)
 
 		print("开始领地巡逻")
-		autoLand()
+		# if i == 7:
+		# 	autoLand()
 
 		print("开始自动收矿")
 		autoMine()
+
+		autoDinner()
 
 		print("autoInvoke")
 		autoInvoke(i)
@@ -1090,10 +1105,10 @@ def main():
 		print("自动收邮件")
 		autoCollectEmail()
 
-	'''
+	# '''
 
 	# 晚
-	# '''
+	'''
 	for i in range(x, y):
 		switchAccount(i)
 
@@ -1114,11 +1129,11 @@ def main():
 		autoCollectClubBonus()
 
 		print("自动完成任务，一天一次，晚上7点后完成")
-		if i in [1, 6, 7, 12]:
+		if i in account_done_mission:
 			print(i, " skip")
 			continue
 		autoFinishMission()
-	# '''
+	'''
 
 	# choose_by_x_axis(1541)
 	# choose_by_x_axis(1228)
@@ -1148,7 +1163,8 @@ def main():
 	# autoCollectEmail()
 	
 	# print("自动完成任务，一天一次，晚上7点后完成")
-	# autoFinishMission()
+	# if i in account_done_mission:
+		# autoFinishMission()
 
 # -------------------------
 #        @Deprecated
