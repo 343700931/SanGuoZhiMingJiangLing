@@ -34,7 +34,7 @@ def getNO():
 	return NO
 
 # 记录每天已经完成任务的号
-account_done_mission = [1, 3, 6, ]
+account_done_mission = [1, 3, 4, 5, 6, 8, 13]
 
 devices = 0 #devices = 0 # 0 - Mobile ; 1 - Simulator
 
@@ -460,9 +460,17 @@ def autoShop():
 		raise AccountNumberException()
 
 	if presentAccountNumber in clubShopMemberList:
+		click(200, 960)
+		sleep(3)
+
 		swipe(1077, 700, 1077, 300)
 		sleep(0.5)
 		swipe(1077, 700, 1077, 300)
+		sleep(0.5)
+		# 确保退出迷之窗口
+		click(1058, 129)
+		sleep(0.5)
+		click(1058, 129)
 		sleep(0.5)
 
 		click(929, 360)
@@ -498,6 +506,8 @@ def countPositionXandY():
 	days = countDays()
 	x_count = days % 7
 	y_count = days // 7 + 1
+	if x_count == 0:
+		x_count = 7
 	x = (x_count - 1) * 225 + 405
 	y = (y_count - 1) * 210 + 345
 	# test
@@ -858,8 +868,10 @@ def autoCollectRedPiecesForOneTime():
 	# 军团活跃点多几次
 	# Reference
 	# 1 - 5 行 Y 轴 : 230 375 515 655 800
+	y1, y2, y3, y4, y5 = 230, 375, 515, 655, 800
+
 	for i in range(1, 4):
-		click(245, 655)
+		click(245, y1)
 		sleep(0.5)
 
 	# collect
@@ -999,6 +1011,8 @@ def autoCollectEmail():
 	sleep(4)
 
 def autoFriends():
+	if presentAccountNumber == 1:
+		return
 	# 更多
 	click(98, 428)
 	sleep(2)
@@ -1075,7 +1089,7 @@ def main():
 	# autoLand()
 
 	# 早
-	# '''
+	'''
 	for i in range(x, y):
 		if i in [3, 4,5,6]:
 			continue
@@ -1105,15 +1119,15 @@ def main():
 		print("自动收邮件")
 		autoCollectEmail()
 
-	# '''
+	'''
 
 	# 晚
 	'''
 	for i in range(x, y):
 		switchAccount(i)
 
-		print("开始自动宴会")
-		autoDinner()
+		# print("开始自动宴会")
+		# autoDinner()
 
 		print("开始自动收矿")
 		autoMine()
