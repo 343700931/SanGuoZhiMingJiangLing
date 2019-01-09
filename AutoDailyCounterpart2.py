@@ -70,8 +70,6 @@ def connect(no = 26):
 			devices = 2
 		print("devices is ", devices)
 
-
-
 def sleep(t):
 	time.sleep(t)
 
@@ -462,6 +460,7 @@ def autoShop():
 		raise AccountNumberException()
 
 	if presentAccountNumber in clubShopMemberList:
+		# enter 军团商店
 		swipe(1077, 700, 1077, 300)
 		sleep(0.5)
 		swipe(1077, 700, 1077, 300)

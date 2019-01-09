@@ -460,6 +460,10 @@ def autoShop():
 		raise AccountNumberException()
 
 	if presentAccountNumber in clubShopMemberList:
+		# enter 军团商店
+		click(200, 960)
+		sleep(3)
+		
 		swipe(1077, 700, 1077, 300)
 		sleep(0.5)
 		swipe(1077, 700, 1077, 300)

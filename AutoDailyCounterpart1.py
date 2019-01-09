@@ -460,6 +460,7 @@ def autoShop():
 		raise AccountNumberException()
 
 	if presentAccountNumber in clubShopMemberList:
+		# enter 军团商店
 		click(200, 960)
 		sleep(3)
 
@@ -1089,10 +1090,10 @@ def main():
 	# autoLand()
 
 	# 早
-	'''
+	# '''
 	for i in range(x, y):
-		if i in [3, 4,5,6]:
-			continue
+		# if i in [3, 4,5,6]:
+		# 	continue
 		switchAccount(i)
 
 		print("开始领地巡逻")
@@ -1119,7 +1120,7 @@ def main():
 		print("自动收邮件")
 		autoCollectEmail()
 
-	'''
+	# '''
 
 	# 晚
 	'''
