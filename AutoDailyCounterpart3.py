@@ -34,7 +34,7 @@ def getNO():
 	return NO
 
 # 记录每天已经完成任务的号
-account_done_mission = [16, 17]
+account_done_mission = []
 
 devices = 0 #devices = 0 # 0 - Mobile ; 1 - Simulator
 
@@ -359,6 +359,9 @@ def autoNormalBattle():
 	for i in range(1, 9):
 		chooseEnemy(2)
 		fight()
+		print("collect 一键宝箱")
+		click(968, 905)
+		sleep(2)
 
 	chooseEnemy(3)
 	fight()
@@ -504,6 +507,8 @@ def countPositionXandY():
 	y_count = days // 7 + 1
 	x = (x_count - 1) * 225 + 405
 	y = (y_count - 1) * 210 + 345
+	if x_count == 0:
+		x_count = 7
 	# test
 	# x = x_count
 	# y = y_count
@@ -1044,7 +1049,7 @@ def main():
 	sleep(1)
 	connect(no)
 	
-	xList = [1, 8, 16]
+	xList = [1, 8 ,16]
 	x = xList[deviceFlag - 1]
 
 	yList = [8, 16, 21]
@@ -1060,8 +1065,8 @@ def main():
 	# 临时
 	# '''
 	# switchAccount(5)
-	# for i in range(1, 8):
-	 	# autoNormalBattle() 
+	for i in range(1, 8):
+	 	autoNormalBattle() 
 	# '''
 	# 临时
 	'''
@@ -1072,18 +1077,19 @@ def main():
 		# autoDailyMission()
 		print("开始自动宴会")
 		autoDinner()
+		autoInvoke()
 	'''
 	# print("自动领地巡逻")
 	# autoLand()
 
 	# 早
-	# '''
+	'''
 	for i in range(x, y):
 		switchAccount(i)
 
 		print("开始领地巡逻")
-		if i != 17:
-			autoLand()
+		# if i != 17:
+		autoLand()
 
 		print("开始自动收矿")
 		autoMine()
@@ -1105,7 +1111,7 @@ def main():
 		print("自动收邮件")
 		autoCollectEmail()
 
-	# '''
+	'''
 
 	# 晚
 	'''

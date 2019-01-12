@@ -17,8 +17,8 @@ NO = NOList[deviceFlag - 1]
 presentAccountNumber = 0 # 当前切到了哪个号， 0 表示有问题
 
 # @Global variable
-
-autoInvokeList = [1, 2, 3, 4, 5, 6]
+# lvl no less than 65
+autoInvokeList = [1, 2, 3, 4, 5, 6, 8, 19, 13]
 
 # lvl no less than 58
 clubShopMemberList = [1, 6, 3, 5, 2, 19, 8, 13, 7, 4, 11, 10, 12, 9]
@@ -34,7 +34,7 @@ def getNO():
 	return NO
 
 # 记录每天已经完成任务的号
-account_done_mission = [15, 8]
+account_done_mission = []
 
 devices = 0 #devices = 0 # 0 - Mobile ; 1 - Simulator
 
@@ -317,6 +317,7 @@ def choose_by_x_axis(x):
 def chooseEnemy(x):
 	if x == 0:
 		print("选择第一个敌人")
+		choose_by_x_axis(280)
 		choose_by_x_axis(341)
 	if x == 1:
 		print("选择第2个敌人")
@@ -359,6 +360,9 @@ def autoNormalBattle():
 	for i in range(1, 9):
 		chooseEnemy(2)
 		fight()
+		print("collect 一键宝箱")
+		click(968, 905)
+		sleep(2)
 
 	chooseEnemy(3)
 	fight()
@@ -461,6 +465,9 @@ def autoShop():
 
 	if presentAccountNumber in clubShopMemberList:
 		# enter 军团商店
+		click(200, 960)
+		sleep(3)
+
 		swipe(1077, 700, 1077, 300)
 		sleep(0.5)
 		swipe(1077, 700, 1077, 300)
@@ -501,6 +508,8 @@ def countPositionXandY():
 	y_count = days // 7 + 1
 	x = (x_count - 1) * 225 + 405
 	y = (y_count - 1) * 210 + 345
+	if x_count == 0:
+		x_count = 7
 	# test
 	# x = x_count
 	# y = y_count
@@ -1040,7 +1049,7 @@ def main():
 	no = NO
 	sleep(1)
 	connect(no)
-	xList = [1, 15, 16]
+	xList = [1, 12, 16]
 	x = xList[deviceFlag - 1]
 
 	yList = [8, 16, 21]
@@ -1055,31 +1064,32 @@ def main():
 
 	# 临时
 	# '''
-	# switchAccount(4)
-	# for i in range(1, 9):
-	 	# autoNormalBattle() 
+	switchAccount(4)
+	for i in range(1, 3):
+	 	autoNormalBattle() 
 	# '''
 	# 临时
 	'''
 	for i in range(x, y):
-		# if i != 1:
-		switchAccount(i)
+		if i != 12:
+			switchAccount(i)
 
 		# autoDailyMission()
 		print("开始自动宴会")
 		autoDinner()
+		autoInvoke(i)
 	'''
 	# print("自动领地巡逻")
 	# autoLand()
 
 	# 早
-	# '''
+	'''
 	for i in range(x, y):
 		switchAccount(i)
 
 		print("开始领地巡逻")
-		if i != 15:
-			autoLand()
+		# if i != 15:
+		autoLand()
 
 		print("开始自动收矿")
 		autoMine()
@@ -1101,7 +1111,7 @@ def main():
 		print("自动收邮件")
 		autoCollectEmail()
 
-	# '''
+	'''
 
 	# 晚
 	'''

@@ -34,7 +34,7 @@ def getNO():
 	return NO
 
 # 记录每天已经完成任务的号
-account_done_mission = [1, 3, 4, 5, 6, 8, 13]
+account_done_mission = [1, 6]
 
 devices = 0 #devices = 0 # 0 - Mobile ; 1 - Simulator
 
@@ -736,8 +736,9 @@ class Adventure(object):
 		global presentAccountNumber
 		PAN = presentAccountNumber
 
-		LandAccountTimesDic = {1:3, 2:4, 3:4, 4:3, 5:4, 6:4, 7:4, 8:4, 9:3, 10:4 ,
-				 11:4, 12:3, 13:4, 14:3, 15:3, 16:3, 17:3, 18:3, 19:4, 20:3}
+		LandAccountTimesDic = {1:3, 2:5, 3:5, 4:4, 5:5, 6:5, 7:4, 8:4,
+		 9:3, 10:4, 11:4, 12:3, 13:4, 14:3, 15:3, 16:3, 
+		 17:3, 18:3, 19:4, 20:3}
 		print("Now Excute collect_xth_position_Land 领地巡逻")
 		for i in range(1, LandAccountTimesDic[PAN] + 1):
 			self.collect_xth_position_Land(i)
@@ -1056,7 +1057,7 @@ def main():
 	no = NO
 	sleep(1)
 	connect(no)
-	xList = [1, 8, 16]
+	xList = [3, 8, 16]
 	x = xList[deviceFlag - 1]
 
 	yList = [8, 16, 21]
@@ -1076,21 +1077,22 @@ def main():
 	 	autoNormalBattle() 
 	'''
 	# 临时
-	'''
+	# '''
 	for i in range(x, y):
-		# if i != 1:
-		switchAccount(i)
+		if i != 3:
+			switchAccount(i)
 
 		# autoDailyMission()
 
 		print("开始自动宴会")
 		autoDinner()
-	'''
+		autoInvoke(i)
+	# '''
 	# print("自动领地巡逻")
 	# autoLand()
 
 	# 早
-	# '''
+	'''
 	for i in range(x, y):
 		# if i in [3, 4,5,6]:
 		# 	continue
@@ -1098,7 +1100,7 @@ def main():
 
 		print("开始领地巡逻")
 		# if i == 7:
-		# 	autoLand()
+		autoLand()
 
 		print("开始自动收矿")
 		autoMine()
@@ -1120,15 +1122,15 @@ def main():
 		print("自动收邮件")
 		autoCollectEmail()
 
-	# '''
+	'''
 
 	# 晚
 	'''
 	for i in range(x, y):
 		switchAccount(i)
 
-		# print("开始自动宴会")
-		# autoDinner()
+		print("开始自动宴会")
+		autoDinner()
 
 		print("开始自动收矿")
 		autoMine()
