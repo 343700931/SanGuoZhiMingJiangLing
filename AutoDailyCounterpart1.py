@@ -18,6 +18,11 @@ presentAccountNumber = 0 # 当前切到了哪个号， 0 表示有问题
 
 # @Global variable
 
+# lvl no less than 70 # Email and friends diff
+moreThan70 = []
+
+# lvl no less than 65
+# TODO
 autoInvokeList = [1, 2, 3, 4, 5, 6]
 
 # lvl no less than 58
@@ -34,7 +39,7 @@ def getNO():
 	return NO
 
 # 记录每天已经完成任务的号
-account_done_mission = [1, 6]
+account_done_mission = []
 
 devices = 0 #devices = 0 # 0 - Mobile ; 1 - Simulator
 
@@ -359,6 +364,9 @@ def autoNormalBattle():
 	for i in range(1, 9):
 		chooseEnemy(2)
 		fight()
+		print("collect 一键宝箱")
+		click(968, 905)
+		sleep(2)
 
 	chooseEnemy(3)
 	fight()
@@ -736,7 +744,7 @@ class Adventure(object):
 		global presentAccountNumber
 		PAN = presentAccountNumber
 
-		LandAccountTimesDic = {1:3, 2:5, 3:5, 4:4, 5:5, 6:5, 7:4, 8:4,
+		LandAccountTimesDic = {1:6, 2:5, 3:5, 4:4, 5:5, 6:5, 7:4, 8:4,
 		 9:3, 10:4, 11:4, 12:3, 13:4, 14:3, 15:3, 16:3, 
 		 17:3, 18:3, 19:4, 20:3}
 		print("Now Excute collect_xth_position_Land 领地巡逻")
@@ -986,7 +994,7 @@ def autoCollectClubBonus():
 	sleep(4)
 
 def autoCollectEmail():
-	if presentAccountNumber == 1:
+	if presentAccountNumber in moreThan70:
 		return
 	# 更多
 	click(98, 428)
@@ -1013,7 +1021,7 @@ def autoCollectEmail():
 	sleep(4)
 
 def autoFriends():
-	if presentAccountNumber == 1:
+	if presentAccountNumber == moreThan70:
 		return
 	# 更多
 	click(98, 428)
@@ -1048,8 +1056,34 @@ def autoFinishMission():
 		click(1696, 560)
 		sleep(5)
 
+	# 如果中午打完boss，就是完成10个任务
+	# 如果晚上，大部分都要到13
+	def click_box(x):
+		if x not in [1, 2, 3, 4, 5]:
+			print("x is out of range")
+			raise Exception 
+		x1, x2, x3, x4, x5 = 714, 953, 1202, 1440, 1690
+		x_list = [x1, x2, x3, x4, x5]
+		# box
+		for i in range(1, 4):
+			click(x_list[ x - 1 ], 270)
+			sleep(0.5)
+		sleep(5)
+		# 退出迷之窗口
+		for i in range(1, 6):
+			click(482, 111)
+			sleep(0.2)
+		sleep(5)
+
+
+	for x in range(1, 6):
+		click_box(x)
+
+
 	back()
 	sleep(4)
+
+
 
 def main():
 	global NO 
