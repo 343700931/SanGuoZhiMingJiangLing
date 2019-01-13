@@ -3,6 +3,8 @@ import subprocess
 import datetime
 import time
 from threading import Thread, Lock
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+
 '''
 
 该脚本专门用于刷三国志名将令的副本，要求为每天第一次打开游戏时执行（为了保证体力>50）
@@ -18,6 +20,9 @@ presentAccountNumber = 0 # 当前切到了哪个号， 0 表示有问题
 
 # @Global variable
 
+# 记录每天已经完成任务的号
+account_done_mission = []
+
 # lvl no less than 70 # Email and friends diff
 moreThan70 = []
 
@@ -28,35 +33,26 @@ autoInvokeList = [1, 2, 3, 4, 5, 6]
 # lvl no less than 58
 clubShopMemberList = [1, 2, 3, 4, 5, 6, 7, 8]
 
-def setNO(no):
+def setNO(num):
+	print("setNO")
 	global NO
-	lock.acquire()
-	NO = no
-	lock.release()
+	NO = NOList[num - 1]
+	print('Present NO is', NO)
 
 def getNO():
 	global NO
 	return NO
 
-# 记录每天已经完成任务的号
-account_done_mission = []
-
 devices = 0 #devices = 0 # 0 - Mobile ; 1 - Simulator
 
 isUsingScale = True
 blank = " "
-xscale = 1
-yscale = 1 
-
+scale = 1
 
 if isUsingScale:
 	scale = 600 / 1920
 
-
-
 presentAccount = False
-
-
 
 def connect(no = 26):
 	print(no)
@@ -1066,7 +1062,7 @@ def autoFinishMission():
 		x_list = [x1, x2, x3, x4, x5]
 		# box
 		for i in range(1, 4):
-			click(x_list[ x - 1 ], 270)
+			click(x_list[x - 1], 270)
 			sleep(0.5)
 		sleep(5)
 		# 退出迷之窗口
@@ -1079,54 +1075,14 @@ def autoFinishMission():
 	for x in range(1, 6):
 		click_box(x)
 
-
 	back()
 	sleep(4)
 
+def run():
+	pass
 
-
-def main():
-	global NO 
-	global deviceFlag
-	no = NO
-	sleep(1)
-	connect(no)
-	xList = [3, 8, 16]
-	x = xList[deviceFlag - 1]
-
-	yList = [8, 16, 21]
-	y = yList[deviceFlag - 1]
-
-	# autoArena()
-	# autoDailyMission()
-
-	# autoMine()
-	# autoCollectEmail()
-	# autoCollectRedPieces()
-
-	# 临时
-	'''
-	#switchAccount(7)
-	for i in range(1, 8):
-	 	autoNormalBattle() 
-	'''
-	# 临时
-	# '''
-	for i in range(x, y):
-		if i != 3:
-			switchAccount(i)
-
-		# autoDailyMission()
-
-		print("开始自动宴会")
-		autoDinner()
-		autoInvoke(i)
-	# '''
-	# print("自动领地巡逻")
-	# autoLand()
-
+def zao(x, y):
 	# 早
-	'''
 	for i in range(x, y):
 		# if i in [3, 4,5,6]:
 		# 	continue
@@ -1156,10 +1112,8 @@ def main():
 		print("自动收邮件")
 		autoCollectEmail()
 
-	'''
-
+def wan(x, y):
 	# 晚
-	'''
 	for i in range(x, y):
 		switchAccount(i)
 
@@ -1184,113 +1138,130 @@ def main():
 			print(i, " skip")
 			continue
 		autoFinishMission()
+
+
+
+def main(df):
+	global NO 
+	global deviceFlag
+	deviceFlag = df
+	# no = NO
+	# sleep(1)
+	print(deviceFlag)
+	setNO(deviceFlag)
+	print(NO)
+	# connect(no)
+	xList = [1, 8, 16]
+	x = xList[deviceFlag - 1]
+
+	yList = [8, 16, 21]
+	y = yList[deviceFlag - 1]
+
+
+	# ---------------------------------
+	# ------------TASK PART------------
+	# ---------------------------------
+
+	# 早
+	# zao(x, y)
+
+	# 晚
+	# wan(x, y)
+
+
+	# 临时
+	'''
+	#switchAccount(7)
+	for i in range(1, 8):
+	 	autoNormalBattle() 
 	'''
 
-	# choose_by_x_axis(1541)
-	# choose_by_x_axis(1228)
-	# choose_by_x_axis(350)
-	# x, y = countPositionXandY()
-	# print(x, y)
-	# switchAccount(2)
-	# autoDinner()
-	# autoMine()
+	# 临时
+	'''
+	for i in range(x, y):
+		if i != 3:
+			switchAccount(i)
 
-	# for i in range(1, 4):
-	# 	autoNormalBattle() 
-
-
-	# autoMiddleBattle()
-	
-	# autoClubSignIn() 
-	# autoDailyCounterpartRun()
-	# autoDailyBonus()
-
-	# autoGuo_guan_zhan_jiang()
-	# autoInvoke()
-	# print("自动好友送精力")
-	# autoFriends()
-
-	# print("自动收邮件")
-	# autoCollectEmail()
-	
-	# print("自动完成任务，一天一次，晚上7点后完成")
-	# if i in account_done_mission:
-		# autoFinishMission()
-
-# -------------------------
-#        @Deprecated
-# -------------------------
-'''
-	for i in range(2, 21):
-		# if i in []:
-		# 	print(i, " skip")
-		# 	continue
-		switchAccount(i)
-	# #	--------------------------------
-	# #	--------------------------------
-
-	# # 	***********
-	# # 	 一天多次
-	# # 	***********
+		# autoDailyMission()
 
 		print("开始自动宴会")
 		autoDinner()
+		autoInvoke(i)
+	'''
+	# print("自动领地巡逻")
+	# autoLand()
 
-		print("开始自动收矿")
-		autoMine()
-
-		# print("每日招募")
-		# autoInvoke(i)
-
-'''
-'''
-		## --------------------------------
-		## --------------------------------
-
-		## 一天一次
-
-		print("开始自动军团祭祀")
-		autoClubSignIn()
-
-		print("开始每日自动购买商店和收福利")
-		autoDailyBonus()
-
-		print("开始每日自动过关斩将")
-		autoGuo_guan_zhan_jiang()
-
-		print("自动好友送精力")
-		# autoFriends()
-
-		print("自动收邮件")
-		autoCollectEmail()
-'''
-
-'''
-		# print("开始自动每日副本")
-		# if i == 1 or i == 7 or i == 9 or i == 10 or i == 11 or i ==12 or i ==14 or i == 15 or i == 16 or i == 17 or i == 18:
-		#  	print(i, " skip")
-		#  	continue
-		# autoDailyCounterpartRun()
+	# ---------------------------------
+	# ------------TASK PART------------
+	# ---------------------------------
 
 
-		# print("自动完成任务，一天一次，晚上7点后完成")
-		# if i in [1, ]:
-		# 	print(i, " skip")
-		# 	continue
-		# autoFinishMission()
+	# autoArena()
+	# autoDailyMission()
+	# autoMine()
+	# autoCollectEmail()
+	# autoCollectRedPieces()
 
-		## !!!  晚上24点前用！否则刷新！  !!!
-		# print("晚上7点后用的，自动收集红色碎片")
-		# autoCollectRedPieces()
 
-		# print("晚上7点后用的，自动收集军团的物资")
-		# autoCollectClubBonus()
 
-		## --------------------------------
-		## --------------------------------
-'''
+	# ------------------------------------------------
+	'''
+	# def multiRun():
+
+	p = ProcessPoolExecutor(3)
+	objs = []
+	# l = [p.submit(task, i) for i in range(1, 4)]
+	for i in range(3):
+		obj = p.submit(task, i)  # 异步调用
+		objs.append(obj)
+
+	for obj in objs:
+		print(obj.result())
+
+	p.shutdown(wait = True)
+	print('='*30)
+	print('Auto End')
+
+	'''
+	# ------------------------------------------------
+
+	'''
+	pool = Pool(processes = 5)
+	print('the test has started')
+	pool.map(main, urls)
+	pool.close()
+	pool.join()
+	'''
+
+def task(i):
+	if i == 1:
+		print("hello")
+	elif i == 2:
+		print("Hi")
+	else:
+		print("Fuck")
+	global deviceFlag
+	deviceFlag = i
+	yield deviceFlag
+	print("deviceFlag is: ", deviceFlag)
+	setNO(deviceFlag)
+	print(getNO())
+	for i in range(1, 4):
+		sleep(2)
+		print("deviceFlag is: ", deviceFlag)
+	# connect(NO)
+
+	xList = [1, 8, 16]
+	x = xList[deviceFlag - 1]
+
+	yList = [8, 16, 21]
+	y = yList[deviceFlag - 1]
+
+	# zao(x, y)
+
+	# wan(x, y)
 
 if __name__ == '__main__':
-	main()
+	main(deviceFlag)
 
 
