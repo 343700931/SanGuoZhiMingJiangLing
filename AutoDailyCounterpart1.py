@@ -33,6 +33,8 @@ autoInvokeList = [1, 2, 3, 4, 5, 6]
 # lvl no less than 58
 clubShopMemberList = [1, 2, 3, 4, 5, 6, 7, 8]
 
+connectTimes = 0
+
 def setNO(num):
 	print("setNO")
 	global NO
@@ -57,19 +59,32 @@ presentAccount = False
 def connect(no = 26):
 	print(no)
 	global devices
-	if not isUsingScale:
-		os.system("adb connect 127.0.0.1:62001")
-		noResponse = "unable" in subprocess.check_output("adb connect 127.0.0.1:62001").decode("utf-8")
-		if not noResponse:
-			devices = 1
-		print("devices is ", devices)
-	else:
-		print("adb connect 127.0.0.1:620" + str(no))
-		os.system("adb connect 127.0.0.1:620" + str(no))
-		noResponse = "unable" in subprocess.check_output("adb connect 127.0.0.1:620" + str(no)).decode("utf-8")
-		if not noResponse:
-			devices = 2
-		print("devices is ", devices)
+	global connectTimes
+	'''
+	# if not isUsingScale:
+	# 	os.system("adb connect 127.0.0.1:62001")
+	# 	noResponse = "unable" in subprocess.check_output("adb connect 127.0.0.1:62001").decode("utf-8")
+	# 	if not noResponse:
+	# 		devices = 1
+	# 	print("devices is ", devices)
+	# else:
+	'''
+	print("adb connect 127.0.0.1:620" + str(no))
+	os.system("adb connect 127.0.0.1:620" + str(no))
+	noResponse = "unable" in subprocess.check_output("adb connect 127.0.0.1:620" + str(no)).decode("utf-8")
+	if not noResponse:
+		devices = 2
+	
+	connectTimes += 1
+	print("devices is ", devices, "\nconnectTimes is ", connectTimes)
+
+	if devices == 0:
+		if connectTimes <= 3:
+			print("devices is ", devices, ", Reconnecting...")
+			sleep(2)
+			connect(no)
+		else:
+			print("connect too many times, but all fail.")
 
 def sleep(t):
 	time.sleep(t)
