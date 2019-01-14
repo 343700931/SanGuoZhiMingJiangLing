@@ -528,6 +528,7 @@ def countPositionXandY():
 	y_count = days // 7 + 1
 	if x_count == 0:
 		x_count = 7
+		y_count -= 1
 	x = (x_count - 1) * 225 + 405
 	y = (y_count - 1) * 210 + 345
 	# test
@@ -756,7 +757,7 @@ class Adventure(object):
 		PAN = presentAccountNumber
 
 		LandAccountTimesDic = {1:6, 2:5, 3:5, 4:4, 5:5, 6:5, 7:4, 8:4,
-		 9:3, 10:4, 11:4, 12:3, 13:4, 14:3, 15:3, 16:3, 
+		 9:3, 10:4, 11:4, 12:3, 13:4, 14:3, 15:4, 16:3, 
 		 17:3, 18:3, 19:4, 20:3}
 		print("Now Excute collect_xth_position_Land 领地巡逻")
 		for i in range(1, LandAccountTimesDic[PAN] + 1):
@@ -1032,7 +1033,7 @@ def autoCollectEmail():
 	sleep(4)
 
 def autoFriends():
-	if presentAccountNumber == moreThan70:
+	if presentAccountNumber in moreThan70:
 		return
 	# 更多
 	click(98, 428)
@@ -1106,8 +1107,8 @@ def zao(x, y):
 		switchAccount(i)
 
 		print("开始领地巡逻")
-		if i != 1:
-			autoLand()
+		# if i != 1:
+		autoLand()
 
 		print("开始自动收矿")
 		autoMine()
@@ -1179,23 +1180,22 @@ def main(df):
 	# ---------------------------------
 
 	# 早
-	zao(x, y)
+	# zao(x, y)
 
 	# 晚
 	# wan(x, y)
 
+	# 临时
+	# '''
+	# switchAccount(1)
+	# for i in range(1, 8):
+	#  	autoNormalBattle() 
+	# '''
 
 	# 临时
-	'''
-	#switchAccount(7)
-	for i in range(1, 8):
-	 	autoNormalBattle() 
-	'''
-
-	# 临时
-	'''
+	# '''
 	for i in range(x, y):
-		if i != 3:
+		if i != 1:
 			switchAccount(i)
 
 		# autoDailyMission()
@@ -1203,7 +1203,7 @@ def main(df):
 		print("开始自动宴会")
 		autoDinner()
 		autoInvoke(i)
-	'''
+	# '''
 	# print("自动领地巡逻")
 	# autoLand()
 
