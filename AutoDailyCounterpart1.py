@@ -24,7 +24,7 @@ presentAccountNumber = 0 # 当前切到了哪个号， 0 表示有问题
 account_done_mission = []
 
 # lvl no less than 70 # Email and friends diff
-moreThan70 = []
+moreThan70 = [1, 6, 5, 3]
 
 # lvl no less than 65
 # TODO
@@ -1043,7 +1043,9 @@ def autoFriends():
 	sleep(4)
 
 def autoFinishMission():
-	click(1803, 338)
+	# 任务这一行从右向左数，第一个为x1常规位置，第二个为x2
+	x1, x2 = 1803, 1637
+	click(x2, 330)
 	sleep(4)
 
 	# 如果中午打完boss，就是完成10个任务
@@ -1089,13 +1091,13 @@ def zao(x, y):
 		switchAccount(i)
 
 		print("开始领地巡逻")
-		# if i == 7:
-		autoLand()
+		if i != 1:
+			autoLand()
 
 		print("开始自动收矿")
 		autoMine()
 
-		autoDinner()
+		# autoDinner()
 
 		print("autoInvoke")
 		autoInvoke(i)
@@ -1149,8 +1151,7 @@ def main(df):
 	# sleep(1)
 	print(deviceFlag)
 	setNO(deviceFlag)
-	print(NO)
-	# connect(no)
+	connect(NO)
 	xList = [1, 8, 16]
 	x = xList[deviceFlag - 1]
 
@@ -1163,7 +1164,7 @@ def main(df):
 	# ---------------------------------
 
 	# 早
-	# zao(x, y)
+	zao(x, y)
 
 	# 晚
 	# wan(x, y)
@@ -1257,7 +1258,7 @@ def task(i):
 	yList = [8, 16, 21]
 	y = yList[deviceFlag - 1]
 
-	# zao(x, y)
+	zao(x, y)
 
 	# wan(x, y)
 

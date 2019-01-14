@@ -10,7 +10,7 @@ from AutoDailyCounterpart1 import AccountNumberException, Adventure
 该脚本专门用于刷三国志名将令的副本，要求为每天第一次打开游戏时执行（为了保证体力>50）
 
 '''
-deviceFlag = 2 # 1 - 01 , 2 - 25 , 3 - 27
+deviceFlag = 3 # 1 - 01 , 2 - 25 , 3 - 27
 
 NOList = ["01", "25", "27"]
 
@@ -19,6 +19,13 @@ NO = NOList[deviceFlag - 1]
 presentAccountNumber = 0 # 当前切到了哪个号， 0 表示有问题
 
 # @Global variable
+
+# 记录每天已经完成任务的号
+account_done_mission = ADC.autoInvokeList
+
+# lvl no less than 70 # Email and friends diff
+moreThan70 = ADC.moreThan70
+
 # lvl no less than 65
 autoInvokeList = ADC.autoInvokeList
 

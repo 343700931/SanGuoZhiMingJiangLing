@@ -19,6 +19,13 @@ NO = NOList[deviceFlag - 1]
 presentAccountNumber = 0 # 当前切到了哪个号， 0 表示有问题
 
 # @Global variable
+
+# 记录每天已经完成任务的号
+account_done_mission = ADC.autoInvokeList
+
+# lvl no less than 70 # Email and friends diff
+moreThan70 = ADC.moreThan70
+
 # lvl no less than 65
 autoInvokeList = ADC.autoInvokeList
 
