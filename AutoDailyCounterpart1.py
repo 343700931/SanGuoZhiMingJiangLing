@@ -1085,8 +1085,41 @@ def autoFinishMission():
 	back()
 	sleep(4)
 
-def run():
-	pass
+
+def autoYouLi(i):
+	# i : 1 - 上方 2 - 中下 3 - 下
+	# WARNING 需要提前打开自动游历
+	# 进入指定的游历区域，中垂线上
+	x = 910
+	y1, y2, y3 = 375, 645, 900 
+	if i == 1:
+		click(x, y1)
+	elif i == 2:
+		click(x, y2)
+	else:
+		click(x, y3)
+	sleep(3)
+
+	# 用丹
+	click(1185, 36)
+	sleep(2)
+	# 7颗
+	for i in range(1, 10):
+		click(1145, 736)
+		sleep(1)
+	# Exit
+	click(1700, 600)
+	sleep(1)
+
+	# 点击开始
+	print('开始自动游历')
+	click(1715, 960)
+
+	sleep(80)
+
+	# Exit
+	click(1700, 600)
+	sleep(1)
 
 def zao(x, y):
 	# 早
