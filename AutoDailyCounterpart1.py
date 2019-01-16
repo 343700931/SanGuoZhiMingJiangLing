@@ -24,14 +24,13 @@ presentAccountNumber = 0 # 当前切到了哪个号， 0 表示有问题
 account_done_mission = []
 
 # lvl no less than 70 # Email and friends diff
-moreThan70 = [1, 6, 5, 3]
+moreThan70 = [1, 6, 5, 3, 2]
 
 # lvl no less than 65
 # TODO
-autoInvokeList = [1, 2, 3, 4, 5, 6]
+autoInvokeList = [1, 6, 5, 3, 2, 8, 4, 19, 13, 7 ]
 
-# lvl no less than 58
-clubShopMemberList = [1, 2, 3, 4, 5, 6, 7, 8]
+# lvl no less than 58 ---  All is no less than 58
 
 connectTimes = 0
 
@@ -478,35 +477,25 @@ def autoShop():
 	if presentAccountNumber == 0:
 		raise AccountNumberException()
 
-	if presentAccountNumber in clubShopMemberList:
-		# enter 军团商店
-		click(200, 960)
-		sleep(3)
 
-		swipe(1077, 700, 1077, 300)
-		sleep(0.5)
-		swipe(1077, 700, 1077, 300)
-		sleep(0.5)
-		# 确保退出迷之窗口
-		click(1058, 129)
-		sleep(0.5)
-		click(1058, 129)
-		sleep(0.5)
+	# enter 军团商店
+	click(200, 960)
+	sleep(3)
 
-		click(929, 360)
-		sleep(0.5)
-		click(1713, 360)
-		sleep(0.5)
+	swipe(1077, 700, 1077, 300)
+	sleep(0.5)
+	swipe(1077, 700, 1077, 300)
+	sleep(0.5)
+	# 确保退出迷之窗口
+	click(1058, 129)
+	sleep(0.5)
+	click(1058, 129)
+	sleep(0.5)
 
-	else:
-		click(200, 960)
-		sleep(3)
-
-		click(931, 433)
-		sleep(2)
-
-		click(1704, 429)
-		sleep(2)
+	click(929, 360)
+	sleep(0.5)
+	click(1713, 360)
+	sleep(0.5)
 
 	# END
 	click(601, 60)
@@ -1102,12 +1091,20 @@ def run():
 def zao(x, y):
 	# 早
 	for i in range(x, y):
-		# if i in [3, 4,5,6]:
+		# if i not in [13, 19, 8, ]:
 		# 	continue
+		#if i in [1, 2, 3, 4, 5, 6 ]:
+		#	continue
+		# if i != 7:
+		# 	switchAccount(i)
+		# if i == 7:
+		# 	global presentAccountNumber
+		# 	presentAccountNumber = 7
+
 		switchAccount(i)
 
 		print("开始领地巡逻")
-		# if i != 1:
+		# if i != 7:
 		autoLand()
 
 		print("开始自动收矿")
@@ -1180,30 +1177,30 @@ def main(df):
 	# ---------------------------------
 
 	# 早
-	# zao(x, y)
+	zao(x, y)
 
 	# 晚
 	# wan(x, y)
 
 	# 临时
-	# '''
+	'''
 	# switchAccount(1)
-	# for i in range(1, 8):
-	#  	autoNormalBattle() 
-	# '''
+	for i in range(1, 3):
+	 	autoNormalBattle() 
+	'''
 
 	# 临时
-	# '''
+	'''
 	for i in range(x, y):
-		if i != 1:
-			switchAccount(i)
+		# if i != 1:
+		switchAccount(i)
 
 		# autoDailyMission()
 
 		print("开始自动宴会")
 		autoDinner()
 		autoInvoke(i)
-	# '''
+	'''
 	# print("自动领地巡逻")
 	# autoLand()
 
@@ -1217,6 +1214,7 @@ def main(df):
 	# autoMine()
 	# autoCollectEmail()
 	# autoCollectRedPieces()
+	# autoDailyCounterpartRun()
 
 
 

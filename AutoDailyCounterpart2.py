@@ -30,7 +30,6 @@ moreThan70 = ADC.moreThan70
 autoInvokeList = ADC.autoInvokeList
 
 # lvl no less than 58
-clubShopMemberList = ADC.clubShopMemberList
 
 def setNO(num):
 	ADC.setNO(num)
