@@ -12,7 +12,7 @@ from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 '''
 deviceFlag = 1 # 1 - 01 , 2 - 25 , 3 - 27
 
-NOList = ["01", "25", "27"]
+NOList = ["62001", "62025", "62031"]
 
 NO = NOList[deviceFlag - 1]
 
@@ -21,7 +21,7 @@ presentAccountNumber = 0 # 当前切到了哪个号， 0 表示有问题
 # @Global variable
 
 # 记录每天已经完成任务的号
-account_done_mission = []
+account_done_mission = [20]
 
 # lvl no less than 70 # Email and friends diff
 moreThan70 = [1, 6, 5, 3, 2]
@@ -68,9 +68,9 @@ def connect(no = 26):
 	# 	print("devices is ", devices)
 	# else:
 	'''
-	print("adb connect 127.0.0.1:620" + str(no))
-	os.system("adb connect 127.0.0.1:620" + str(no))
-	noResponse = "unable" in subprocess.check_output("adb connect 127.0.0.1:620" + str(no)).decode("utf-8")
+	print("adb connect 127.0.0.1:" + str(no))
+	os.system("adb connect 127.0.0.1:" + str(no))
+	noResponse = "unable" in subprocess.check_output("adb connect 127.0.0.1:" + str(no)).decode("utf-8")
 	if not noResponse:
 		devices = 2
 	
@@ -84,6 +84,7 @@ def connect(no = 26):
 			connect(no)
 		else:
 			print("connect too many times, but all fail.")
+			raise Exception
 
 def sleep(t):
 	time.sleep(t)
@@ -92,7 +93,7 @@ def click(x, y):
 	if devices == 1:
 		os.system("adb -s 127.0.0.1:62001 shell input tap " + str(x) + blank + str(y))
 	if devices == 2:
-		os.system("adb -s 127.0.0.1:620" + str(NO) + " shell input tap " + str(scale * x) + blank + str(scale * y + 57))
+		os.system("adb -s 127.0.0.1:" + str(NO) + " shell input tap " + str(scale * x) + blank + str(scale * y + 57))
 		# print("xclick:", scale * x, ", yclick:", scale * y + 57)
 
 def swipe(startx, starty, stopx, stopy):
@@ -103,7 +104,7 @@ def swipe(startx, starty, stopx, stopy):
 	if devices == 2:
 		# print("adb -s 127.0.0.1:620" + str(NO) + " shell input swipe " + str(startx) + blank + str(starty) 
 		# + blank + str(stopx) + blank + str(stopy))
-		os.system("adb -s 127.0.0.1:620" + str(NO) + " shell input swipe " + str(scale * startx) + blank 
+		os.system("adb -s 127.0.0.1:" + str(NO) + " shell input swipe " + str(scale * startx) + blank 
 			+ str(scale * starty + 57) + blank + str(scale * stopx) + blank + str(scale * stopy + 57))
 
 class AccountNumberException(Exception):
@@ -132,13 +133,13 @@ def fight():
 	sleep(0.2)
 	skipPlot()
 
-	sleep(3)
+	sleep(6)
 
 def adbInput(string):
 	if devices == 1:
 		os.system("adb -s 127.0.0.1:62021 shell input " + string)
 	if devices == 2:
-		os.system("adb -s 127.0.0.1:620" + str(NO) + " shell input " + string)
+		os.system("adb -s 127.0.0.1:" + str(NO) + " shell input " + string)
 
 def switchAccount(x):
 	global presentAccount
@@ -374,16 +375,19 @@ def autoNormalBattle():
 	for i in range(1, 9):
 		chooseEnemy(2)
 		fight()
+		sleep(5)
 		print("collect 一键宝箱")
 		click(968, 905)
 		sleep(2)
 
 	chooseEnemy(3)
 	fight()
-	sleep(15)
+	sleep(20)
 
 	# 一键宝箱
 	print("collect 一键宝箱")
+	click(968, 905)
+	sleep(2)
 	click(968, 905)
 	sleep(2)
 	click(1795, 1042)
@@ -667,6 +671,8 @@ class Adventure(object):
 			self.treasureExp()
 
 			self.spiritWeaponLvlupStone()
+
+			self.monsterExp()
 			
 		self.gold()
 
@@ -695,6 +701,9 @@ class Adventure(object):
 
 	def	spiritWeaponLvlupStone(self):
 		self.dailyMissionCommonMethod("spiritWeaponLvlupStone", 1707, 721)
+
+	def monsterExp(self):
+		self.dailyMissionCommonMethod("monsterExp", 1304, 194)
 
 	# --------------------------------
 	# Always
@@ -733,7 +742,7 @@ class Adventure(object):
 		self.enter3Guo_guan_zhan_jiang()
 		# 点完扫荡就回去
 		click(1650, 975)
-		sleep(10)
+		sleep(40)
 		click(1650, 975)
 		back()
 		sleep(2)
@@ -745,9 +754,9 @@ class Adventure(object):
 		global presentAccountNumber
 		PAN = presentAccountNumber
 
-		LandAccountTimesDic = {1:6, 2:5, 3:5, 4:4, 5:5, 6:5, 7:4, 8:4,
-		 9:3, 10:4, 11:4, 12:3, 13:4, 14:3, 15:4, 16:3, 
-		 17:3, 18:3, 19:4, 20:3}
+		LandAccountTimesDic = {1:6, 2:5, 3:6, 4:4, 5:5, 6:6, 7:5, 8:4,
+		 9:3, 10:4, 11:4, 12:3, 13:5, 14:3, 15:4, 16:3, 
+		 17:3, 18:3, 19:4, 20:4}
 		print("Now Excute collect_xth_position_Land 领地巡逻")
 		for i in range(1, LandAccountTimesDic[PAN] + 1):
 			self.collect_xth_position_Land(i)
@@ -856,7 +865,8 @@ def autoLand():
 
 def autoDailyBonus():
 	# Once a day
-	autoShop()
+	if presentAccountNumber not in [1, 8, 16]:
+		autoShop()
 	autoFuli()
 	# In adventure
 	print("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
@@ -882,7 +892,7 @@ def autoCollectRedPiecesForOneTime():
 	y1, y2, y3, y4, y5 = 230, 375, 515, 655, 800
 
 	for i in range(1, 4):
-		click(245, y1)
+		click(245, y3)
 		sleep(0.5)
 
 	# collect
@@ -1103,7 +1113,7 @@ def autoYouLi(i):
 	# 用丹
 	click(1185, 36)
 	sleep(2)
-	# 7颗
+	# 9颗
 	for i in range(1, 10):
 		click(1145, 736)
 		sleep(1)
@@ -1123,9 +1133,14 @@ def autoYouLi(i):
 
 def zao(x, y):
 	# 早
+
 	for i in range(x, y):
-		# if i not in [13, 19, 8, ]:
+		# if i != 3:
 		# 	continue
+		global presentAccountNumber
+		presentAccountNumber = i
+		# if i not in [2]:
+			# continue
 		#if i in [1, 2, 3, 4, 5, 6 ]:
 		#	continue
 		# if i != 7:
@@ -1133,6 +1148,7 @@ def zao(x, y):
 		# if i == 7:
 		# 	global presentAccountNumber
 		# 	presentAccountNumber = 7
+		# if i not in [1, 16, 8]:
 
 		switchAccount(i)
 
@@ -1143,7 +1159,7 @@ def zao(x, y):
 		print("开始自动收矿")
 		autoMine()
 
-		# autoDinner()
+		autoDinner()
 
 		print("autoInvoke")
 		autoInvoke(i)
@@ -1187,6 +1203,64 @@ def wan(x, y):
 			continue
 		autoFinishMission()
 
+def run(x, y):
+	# 早
+	zao(x, y)
+
+	# 晚
+	# wan(x, y)
+
+
+	# 临时
+	'''
+	for i in range(x, y):
+		# if i != 1:
+		switchAccount(i)
+
+		# autoDailyMission()
+
+		print("开始自动宴会")
+		autoDinner()
+		autoInvoke(i)
+		# autoClubSignIn()
+	'''
+
+	# 临时
+	# '''
+	# switchAccount(13)
+	# for i in range(1, 4):
+	# 	autoYouLi(3)
+	 	# autoNormalBattle() 
+	# '''
+
+	'''
+	# 临时
+	if deviceFlag == 1:
+		switchAccount(14)
+	elif deviceFlag == 2:
+		switchAccount(15)
+	else:
+		switchAccount(16)
+
+	for i in range(1, 3):
+	# 	autoYouLi(2)
+	 	autoNormalBattle() 
+
+	'''
+	# print("自动领地巡逻")
+	# autoLand()
+
+	# ---------------------------------
+	# ------------TASK PART------------
+	# ---------------------------------
+
+	# autoDailyCounterpartRun()
+	# autoArena()
+	# autoDailyMission()
+	# autoMine()
+	# autoCollectEmail()
+	# autoCollectRedPieces()
+
 
 
 def main(df):
@@ -1208,47 +1282,10 @@ def main(df):
 	# ---------------------------------
 	# ------------TASK PART------------
 	# ---------------------------------
+	# if deviceFlag == 1:
+		# run(x, y)
 
-	# 早
-	zao(x, y)
-
-	# 晚
-	# wan(x, y)
-
-	# 临时
-	'''
-	# switchAccount(1)
-	for i in range(1, 3):
-	 	autoNormalBattle() 
-	'''
-
-	# 临时
-	'''
-	for i in range(x, y):
-		# if i != 1:
-		switchAccount(i)
-
-		# autoDailyMission()
-
-		print("开始自动宴会")
-		autoDinner()
-		autoInvoke(i)
-	'''
-	# print("自动领地巡逻")
-	# autoLand()
-
-	# ---------------------------------
-	# ------------TASK PART------------
-	# ---------------------------------
-
-
-	# autoArena()
-	# autoDailyMission()
-	# autoMine()
-	# autoCollectEmail()
-	# autoCollectRedPieces()
-	# autoDailyCounterpartRun()
-
+	# run(x, y)
 
 
 	# ------------------------------------------------
@@ -1279,7 +1316,7 @@ def main(df):
 	pool.close()
 	pool.join()
 	'''
-
+'''
 def task(i):
 	if i == 1:
 		print("hello")
@@ -1307,7 +1344,7 @@ def task(i):
 	zao(x, y)
 
 	# wan(x, y)
-
+'''
 if __name__ == '__main__':
 	main(deviceFlag)
 

@@ -12,7 +12,7 @@ from AutoDailyCounterpart1 import AccountNumberException, Adventure
 '''
 deviceFlag = 3 # 1 - 01 , 2 - 25 , 3 - 27
 
-NOList = ["01", "25", "27"]
+NOList = ADC.NOList
 
 NO = NOList[deviceFlag - 1]
 
@@ -60,11 +60,11 @@ def sleep(t):
 	ADC.sleep(t)
 
 def click(x, y):
-	if devices == 1:
-		os.system("adb -s 127.0.0.1:62001 shell input tap " + str(x) + blank + str(y))
 	if devices == 2:
-		os.system("adb -s 127.0.0.1:620" + str(NO) + " shell input tap " + str(scale * x) + blank + str(scale * y + 57))
+		os.system("adb -s 127.0.0.1:" + str(NO) + " shell input tap " + str(scale * x) + blank + str(scale * y + 57))
 		# print("xclick:", scale * x, ", yclick:", scale * y + 57)
+	else:
+		raise Exception
 
 def swipe(startx, starty, stopx, stopy):
 	global devices
@@ -74,8 +74,9 @@ def swipe(startx, starty, stopx, stopy):
 	if devices == 2:
 		# print("adb -s 127.0.0.1:620" + str(NO) + " shell input swipe " + str(startx) + blank + str(starty) 
 		# + blank + str(stopx) + blank + str(stopy))
-		os.system("adb -s 127.0.0.1:620" + str(NO) + " shell input swipe " + str(scale * startx) + blank 
+		os.system("adb -s 127.0.0.1:" + str(NO) + " shell input swipe " + str(scale * startx) + blank 
 			+ str(scale * starty + 57) + blank + str(scale * stopx) + blank + str(scale * stopy + 57))
+
 '''
 class AccountNumberException(Exception):
 	"""docstring for AccountNumberException"""
@@ -96,7 +97,7 @@ def adbInput(string):
 	if devices == 1:
 		os.system("adb -s 127.0.0.1:62021 shell input " + string)
 	if devices == 2:
-		os.system("adb -s 127.0.0.1:620" + str(NO) + " shell input " + string)
+		os.system("adb -s 127.0.0.1:" + str(NO) + " shell input " + string)
 
 def switchAccount(x):
 	ADC.switchAccount(x)
@@ -379,10 +380,39 @@ def autoFriends():
 def autoFinishMission():
 	ADC.autoFinishMission()
 
+def autoYouLi(i):
+	ADC.autoYouLi(i)
+
+
+def run():
+	print('run')
+	# '''
+	# 临时
+	# switchAccount(2)
+	# for i in range(1, 3):
+		# autoYouLi(1)
+		# autoNormalBattle()
+	# '''
+
+	'''
+	# switchAccount(3)
+	global presentAccountNumber
+	presentAccountNumber = 3
+	autoGuo_guan_zhan_jiang()
+	autoShop()
+	'''
+
+
+	# 16
+
 def main():
 	print(deviceFlag)
 	
 	ADC.main(deviceFlag)
+
+	run()
+
+
 
 if __name__ == '__main__':
 	main()
