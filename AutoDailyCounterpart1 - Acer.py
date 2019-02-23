@@ -86,6 +86,7 @@ def connect(no = 26):
 			connect(no)
 		else:
 			print("connect too many times, but all fail.")
+			raise Exception
 
 def sleep(t):
 	time.sleep(t)
@@ -359,8 +360,6 @@ def chooseEnemy(x):
 		choose_by_x_axis(1490)
 		choose_by_x_axis(1375)
 		choose_by_x_axis(1200)
-		
-		
 	sleep(3)
 
 def enterBattle():
@@ -504,35 +503,24 @@ def autoShop():
 	if presentAccountNumber == 0:
 		raise AccountNumberException()
 
-	if presentAccountNumber in clubShopMemberList:
-		# enter 军团商店
-		click(200, 960)
-		sleep(3)
+	# enter 军团商店
+	click(200, 960)
+	sleep(3)
 
-		swipe(1077, 700, 1077, 300)
-		sleep(0.5)
-		swipe(1077, 700, 1077, 300)
-		sleep(0.5)
-		# 确保退出迷之窗口
-		click(1058, 129)
-		sleep(0.5)
-		click(1058, 129)
-		sleep(0.5)
+	swipe(1077, 700, 1077, 300)
+	sleep(0.5)
+	swipe(1077, 700, 1077, 300)
+	sleep(0.5)
+	# 确保退出迷之窗口
+	click(1058, 129)
+	sleep(0.5)
+	click(1058, 129)
+	sleep(0.5)
 
-		click(929, 360)
-		sleep(0.5)
-		click(1713, 360)
-		sleep(0.5)
-
-	else:
-		click(200, 960)
-		sleep(3)
-
-		click(931, 433)
-		sleep(2)
-
-		click(1704, 429)
-		sleep(2)
+	click(929, 360)
+	sleep(0.5)
+	click(1713, 360)
+	sleep(0.5)
 
 	# END
 	click(601, 60)
@@ -560,8 +548,6 @@ def newcountDays(days):
 	elif presentAccountNumber == 18:
 		trueDays -= 12
 	return trueDays
-
-
 
 def countPositionXandY():
 	days = countDays()
@@ -598,15 +584,12 @@ def autoFuli():
 		click(1647, 170)
 	sleep(4)
 
-
-
 	# First, sign
 	click(200, 276)
 	sleep(2)
 	x, y = countPositionXandY()
 	click(x, y)
 	sleep(2)
-
 
 	# 确保退出迷之窗口
 	click(1058, 129)
@@ -632,6 +615,12 @@ def autoFuli():
 	# 领取
 	click(853, 940)
 	sleep(3)
+
+	# 确保退出迷之窗口
+	click(1058, 129)
+	sleep(0.5)
+	click(1058, 129)
+	sleep(0.5)
 	print("五谷丰登 END")
 
 	# Third 聚宝盆
@@ -784,6 +773,8 @@ class Adventure(object):
 			click(900, 785)
 			sleep(0.5)
 			# 如果中间点不到，就点左边
+			click(675, 785)
+			sleep(2)
 			click(450, 785)
 			sleep(15)
 
@@ -1012,7 +1003,6 @@ def autoInvoke(acc):
 
 	click(954, 1002)
 	sleep(2)
-
 
 	click(1061, 877)
 	sleep(5)

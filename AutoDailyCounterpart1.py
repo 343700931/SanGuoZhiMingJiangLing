@@ -11,8 +11,9 @@ from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 
 '''
 deviceFlag = 1 # 1 - 01 , 2 - 25 , 3 - 27
+eventFlag = False
 
-NOList = ["62001", "62025", "62031"]
+NOList = ["01", "25", "31"]
 
 NO = NOList[deviceFlag - 1]
 
@@ -21,18 +22,19 @@ presentAccountNumber = 0 # 当前切到了哪个号， 0 表示有问题
 # @Global variable
 
 # 记录每天已经完成任务的号
-account_done_mission = [20]
+account_done_mission = []
 
 # lvl no less than 70 # Email and friends diff
-moreThan70 = [1, 6, 5, 3, 2]
+moreThan70 = [1, 6, 5, 3, 2, 13, 4, 8, 7]
 
 # lvl no less than 65
-# TODO
-autoInvokeList = [1, 6, 5, 3, 2, 8, 4, 19, 13, 7 ]
-
-# lvl no less than 58 ---  All is no less than 58
+autoInvokeList = range(1, 21)
+# lvl no less than 58
+clubShopMemberList = range(1, 21)
 
 connectTimes = 0
+
+dailySignBugAccount = []
 
 def setNO(num):
 	print("setNO")
@@ -294,8 +296,11 @@ def autoDailyCounterpartRun():
 
 def autoDinner():
 	# 福利
-	# click(1482, 170) # 如果有类似元旦活动的时候，用这个
-	click(1647, 170)
+	if eventFlag:
+		click(1482, 170) # 如果有类似元旦活动的时候，用这个
+	else:
+		click(1647, 170)
+
 	sleep(4)
 
 	# Dinner
@@ -315,7 +320,7 @@ def autoMine():
 	print("Enter mine")
 	click(1643, 790)
 	sleep(2)
-	click(1040, 500)
+	click(533, 476)
 	sleep(1)
 	back()
 	sleep(3)
@@ -352,9 +357,9 @@ def chooseEnemy(x):
 		choose_by_x_axis(961)
 	if x == 3:
 		print("选择最后一个敌人")
-		choose_by_x_axis(1200)
-		choose_by_x_axis(1375)
 		choose_by_x_axis(1490)
+		choose_by_x_axis(1375)
+		choose_by_x_axis(1200)
 	sleep(3)
 
 def enterBattle():
@@ -373,6 +378,7 @@ def autoNormalBattle():
 	chooseEnemy(1)
 	fight()
 	for i in range(1, 8):
+		print('选择第', i+2, '个敌人')
 		chooseEnemy(2)
 		fight()
 		sleep(5)
@@ -384,7 +390,7 @@ def autoNormalBattle():
 
 	chooseEnemy(3)
 	fight()
-	sleep(20)
+	sleep(10)
 
 	# 一键宝箱
 	print("collect 一键宝箱")
@@ -415,7 +421,7 @@ def autoClubSignIn():
 	click(1561, 703)
 	sleep(2)
 
-	if isBigAccount == True:
+	if presentAccountNumber == 1:
 		click(461, 861)
 	else:
 		click(950, 861)
@@ -432,6 +438,7 @@ def autoClubSignIn():
 
 
 def autoShop():
+	print("autoshop start")
 	def buyFirstPlace():
 		# buy blue one
 		click(931, 433)
@@ -440,6 +447,13 @@ def autoShop():
 		sleep(1)
 		click(1161, 810)
 		sleep(2)
+
+		# 确保退出迷之窗口
+		click(1058, 129)
+		sleep(0.5)
+		click(1058, 129)
+		sleep(0.5)
+
 	def buySecondPlace():
 		# buy pink one
 		click(1704, 429)
@@ -448,6 +462,12 @@ def autoShop():
 		sleep(1)
 		click(1161, 810)
 		sleep(2)
+
+		# 确保退出迷之窗口
+		click(1058, 129)
+		sleep(0.5)
+		click(1058, 129)
+		sleep(0.5)
 
 	# -------
 	#  start
@@ -483,7 +503,6 @@ def autoShop():
 	if presentAccountNumber == 0:
 		raise AccountNumberException()
 
-
 	# enter 军团商店
 	click(200, 960)
 	sleep(3)
@@ -511,19 +530,38 @@ def autoShop():
 
 	back()
 	sleep(4)
-
+	print("autoshop end")
 def countDays():
-	a = datetime.datetime(2018, 12, 31)
+	a = datetime.datetime(2019, 1, 31)
 	b = datetime.datetime.now()
 	return (b-a).days
 
+def newcountDays(days):
+	trueDays = days
+	global presentAccountNumber
+	if presentAccountNumber in [4, 5, 8, 9, 10, 11, 12, 13]:
+		trueDays -= 1
+	elif presentAccountNumber == 7:
+		trueDays -= 8
+	elif presentAccountNumber in [15, 17, 19, 20]:
+		trueDays -= 2
+	elif presentAccountNumber == 18:
+		trueDays -= 12
+	return trueDays
+
 def countPositionXandY():
 	days = countDays()
+	days = newcountDays(days)
+	# if presentAccountNumber in dailySignBugAccount:
+	# 	days -= 1
+	# print(days)
 	x_count = days % 7
 	y_count = days // 7 + 1
 	if x_count == 0:
 		x_count = 7
+	if y_count >= 4:
 		y_count -= 1
+
 	x = (x_count - 1) * 225 + 405
 	y = (y_count - 1) * 210 + 345
 	# test
@@ -532,6 +570,7 @@ def countPositionXandY():
 	return x, y
 
 def autoFuli():
+	print("autofuli start")
 	'''
 	**************************
 	#for lvl no less than 50 !
@@ -539,11 +578,11 @@ def autoFuli():
 	'''
 
 	# 福利
-	# click(1482, 170) # 如果有类似元旦活动的时候，用这个
-	click(1647, 170)
+	if eventFlag:
+		click(1482, 170) # 如果有类似元旦活动的时候，用这个
+	else:
+		click(1647, 170)
 	sleep(4)
-
-
 
 	# First, sign
 	click(200, 276)
@@ -551,7 +590,6 @@ def autoFuli():
 	x, y = countPositionXandY()
 	click(x, y)
 	sleep(2)
-
 
 	# 确保退出迷之窗口
 	click(1058, 129)
@@ -577,6 +615,12 @@ def autoFuli():
 	# 领取
 	click(853, 940)
 	sleep(3)
+
+	# 确保退出迷之窗口
+	click(1058, 129)
+	sleep(0.5)
+	click(1058, 129)
+	sleep(0.5)
 	print("五谷丰登 END")
 
 	# Third 聚宝盆
@@ -682,6 +726,8 @@ class Adventure(object):
 		self.gold()
 
 		print("DailyMission END")
+		skipPlot()
+		sleep(2)
 		back()
 		sleep(3)
 
@@ -725,13 +771,19 @@ class Adventure(object):
 			# Fight Middle one
 			print("Fight " + missionType +" for the " + str(i) + "th times")
 			click(900, 785)
-			sleep(6)
+			sleep(2)
+			# 如果中间点不到，就点左边
+			click(675, 785)
+			sleep(2)
+			click(450, 785)
+			sleep(15)
 
 			# 跳过
-
+			print("click 跳过")
 			click(1826, 1035)
 			sleep(3)
 
+			print("random click")
 			click(1826, 1035)
 			sleep(1)
 
@@ -759,8 +811,8 @@ class Adventure(object):
 		global presentAccountNumber
 		PAN = presentAccountNumber
 
-		LandAccountTimesDic = {1:6, 2:5, 3:6, 4:4, 5:5, 6:6, 
-		 7:5, 8:4, 9:3, 10:4, 11:4, 12:3, 13:5, 14:3, 15:3, 
+		LandAccountTimesDic = {1:6, 2:5, 3:6, 4:5, 5:6, 6:6, 
+		 7:5, 8:4, 9:3, 10:4, 11:4, 12:3, 13:5, 14:3, 15:4, 
 		 16:3, 17:3, 18:3, 19:4, 20:4}
 		print("Now Excute collect_xth_position_Land 领地巡逻")
 		for i in range(1, LandAccountTimesDic[PAN] + 1):
@@ -822,6 +874,7 @@ class Adventure(object):
 		sleep(2)
 
 def autoGuo_guan_zhan_jiang():
+	print('自动过关斩将')
 	adventureObject = Adventure()
 
 	# 冒险
@@ -834,6 +887,7 @@ def autoGuo_guan_zhan_jiang():
 	sleep(4)
 
 def autoDailyMission():
+	print('自动每日副本')
 	adventureObject = Adventure()
 
 	# 冒险
@@ -846,6 +900,7 @@ def autoDailyMission():
 	sleep(4)
 
 def autoArena():
+	print('自动竞技场')
 	adventureObject = Adventure()
 
 	# 冒险
@@ -870,8 +925,9 @@ def autoLand():
 
 def autoDailyBonus():
 	# Once a day
-	if presentAccountNumber not in [1, 8, 16]:
-		autoShop()
+	global presentAccountNumber
+	# if presentAccountNumber not in [1, 8, 16]:
+	autoShop()
 	autoFuli()
 	# In adventure
 	print("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
@@ -887,8 +943,10 @@ def autoDailyBonus():
 
 def autoCollectRedPiecesForOneTime():
 	# Enter 活动
-	# click(1650, 168) # 如果有类似元旦活动，点这个
-	click(1815, 168)
+	if eventFlag:
+		click(1650, 168) # 如果有类似元旦活动，点这个
+	else:
+		click(1815, 168)
 	sleep(4)
 
 	# 军团活跃点多几次
@@ -937,16 +995,14 @@ def yuandan():
 def autoCollectRedPieces():
 	autoCollectRedPiecesForOneTime()
 	autoCollectRedPiecesForOneTime()
-	# yuandan()
+	global eventFlag
+	if eventFlag:
+		yuandan()
 
 def autoInvoke(acc):
-	global autoInvokeList
-	if acc in autoInvokeList:
-		click(954, 1002)
-		sleep(2)
-	else:
-		click(834, 985)
-		sleep(2)
+
+	click(954, 1002)
+	sleep(2)
 
 	click(1061, 877)
 	sleep(5)
@@ -1009,14 +1065,160 @@ def autoCollectClubBonus():
 	back()
 	sleep(4)
 
-def autoCollectEmail():
-	if presentAccountNumber in moreThan70:
+def autoClubSupport():
+	global presentAccountNumber
+	if presentAccountNumber in [1,2,3,4,5,6]:
+		print('当前账号为1~6，跳过')
 		return
+	# 主界面
+	# Enter club
+	click(1431, 993)
+	sleep(3)
+
+	# Enter 军团援助
+	click(420, 710)
+	sleep(2)
+
+	# 1号位
+	click(1161, 384)
+	sleep(1)
+
+	# click first one
+	click(823, 309)
+	sleep(1)
+
+	# 以防之前已经有援助了
+	click(1709, 136)
+	sleep(1)
+
+	# 2号位
+	click(1161, 648)
+	sleep(1)
+
+	# click first one
+	click(823, 309)
+	sleep(1)
+
+	# 3号位
+	click(1161, 916)
+	sleep(1)
+
+	# click first one
+	click(823, 309)
+	sleep(1)
+	# back to main scene
+	back()
+	sleep(2)
+	back()
+	sleep(2)
+
+def autoHelpClubPieces():
+	# 自动帮助军团援助
+	global presentAccountNumber
+	if presentAccountNumber in [1]:
+		print('当前账号为1，跳过')
+		return
+	# 主界面
+	# Enter club
+	click(1431, 993)
+	sleep(3)
+
+	# Enter 军团援助
+	click(420, 710)
+	sleep(2)
+
+	# 援助
+	click(133, 409)
+	sleep(1)
+
+	for i in range(1, 11):
+		click(865, 343)
+		sleep(1)
+		click(865, 343)
+		sleep(1)
+
+	# 保证退出蜜汁窗口
+	for i in range(1, 5):
+		click(591, 132)
+		sleep(0.2)
+
+	# back to main scene 
+	back()
+	sleep(2)
+	back()
+	sleep(2)
+
+def autoCollectClubPieces():
+	# 自动收集军团援助
+	# 主界面
+	# Enter club
+	click(1431, 993)
+	sleep(3)
+
+	# Enter 军团援助
+	click(420, 710)
+	sleep(2)
+
+	# Collect
+	x = 1735
+	y1, y2, y3 = 403, 668, 938
+
+	click(x, y1)
+	sleep(0.2)
+	click(x, y2)
+	sleep(0.2)
+	click(x, y3)
+	sleep(0.2)
+
+	# Big bonus
+	click(659, 663)
+	sleep(2)
+
+	click(966, 814)
+	sleep(1)
+
+	for i in range(1, 5):
+		click(500, 85)
+		sleep(0.5)
+
+	# Exit
+	back()
+	sleep(2)
+	back()
+	sleep(2)
+
+def autoCollectHolyTree():
+	# Enter Holy Tree
+	click(1465, 803)
+	sleep(3)
+
+	# 点树
+	click(968, 571)
+	sleep(1)
+
+	# collect
+	click(599, 589)
+	sleep(0.5)
+
+	# close
+	back()
+	sleep(1)
+
+	# back to main scene
+	back()
+	sleep(2)
+
+def autoCollectEmail():
+
 	# 更多
 	click(98, 428)
 	sleep(2)
 
-	click(1053, 496)
+	# mail
+	if presentAccountNumber in moreThan70:
+		click(300, 663)
+	else:
+		click(1053, 496)
 	sleep(3)
 
 	# Collect
@@ -1036,15 +1238,22 @@ def autoCollectEmail():
 	back()
 	sleep(4)
 
+def gengduoxy(x, y):
+	pos_x = 0
+	pos_y = 0
+	return pos_x, pos_y
+
 def autoFriends():
-	if presentAccountNumber in moreThan70:
-		return
+
 	# 更多
 	click(98, 428)
 	sleep(2)
 
 	# Friends
-	click(303, 650)
+	if presentAccountNumber in moreThan70:
+		click(448, 663)
+	else:
+		click(303, 650)
 	sleep(3)
 
 	# Collect
@@ -1138,42 +1347,47 @@ def autoYouLi(i):
 
 def zao(x, y):
 	# 早
-
+	# for i in [7]:
 	for i in range(x, y):
-		# if i != 3:
-		# 	continue
+		# if i not in dailySignBugAccount:
+			# continue
+		# if i in [1, 6]:
+			# continue
 		global presentAccountNumber
 		presentAccountNumber = i
-		# if i not in [2]:
-			# continue
-		#if i in [1, 2, 3, 4, 5, 6 ]:
-		#	continue
-		# if i != 7:
-		# 	switchAccount(i)
-		# if i == 7:
-		# 	global presentAccountNumber
-		# 	presentAccountNumber = 7
-		# if i not in [1, 16, 8]:
+		if i != x:
+			switchAccount(i)
 
-		switchAccount(i)
+		# autoDinner()
 
-		print("开始领地巡逻")
-		# if i != 7:
-		autoLand()
-
-		print("开始自动收矿")
-		autoMine()
-
-		autoDinner()
+			print("开始每日自动购买商店和收福利")
+			autoDailyBonus()
 
 		print("autoInvoke")
 		autoInvoke(i)
 
+
+		print("开始领地巡逻")
+		# if i not in [2]:
+		autoLand()
+
 		print("开始自动军团祭祀")
 		autoClubSignIn()
 
-		print("开始每日自动购买商店和收福利")
-		autoDailyBonus()
+		print("开始自动军团援助")
+		autoClubSupport()
+
+		print("开始自动帮助军团援助")
+		# if i > 6:
+		autoHelpClubPieces()
+
+		print("开始自动神树收集")
+		if i in moreThan70:
+			autoCollectHolyTree()
+
+		#print("开始自动收矿")
+		#autoMine()
+
 
 		print("自动好友送精力")
 		autoFriends()
@@ -1181,32 +1395,114 @@ def zao(x, y):
 		print("自动收邮件")
 		autoCollectEmail()
 
+		autoCollectRedPieces()
+
+		#autoBaoming()
+
+
 def wan(x, y):
 	# 晚
 	for i in range(x, y):
+		# if i in range(1, 7):
+		# 	continue
+
+		global presentAccountNumber
+		presentAccountNumber = i
+
+		# if i != x:
 		switchAccount(i)
 
+		# if i not in [1,2,3,4,5]:
 		print("开始自动宴会")
-		autoDinner()
+		# autoDinner()
 
+		# autoDailyMission()
+		# autoFuli()
 		print("开始自动收矿")
 		autoMine()
 
+		# print('自动领地')
+		#autoLand()
+		# autoClubSignIn()
+
 		print("自动收邮件")
 		autoCollectEmail()
+
+
+
+		print("晚上7点后用的，自动收集军团的物资")
+		autoCollectClubPieces() 
+		autoCollectClubBonus()
+
+		print("自动完成任务，一天一次，晚上7点后完成")
+		if i not in account_done_mission:
+			autoFinishMission()
+		else:
+			print("skip")
 
 		# !!!  晚上24点前用！否则刷新！  !!!
 		print("晚上7点后用的，自动收集红色碎片")
 		autoCollectRedPieces()
 
-		print("晚上7点后用的，自动收集军团的物资")
-		autoCollectClubBonus()
+def autoBaoming():
+	# 对应从由向左数，1,2,3,4 ， 0相当于在主界面可以点
+	baoming_type = 3
 
-		print("自动完成任务，一天一次，晚上7点后完成")
-		if i in account_done_mission:
-			print(i, " skip")
-			continue
-		autoFinishMission()
+	if baoming_type in range(1, 5):
+		x1, x2 = 1803, 1637
+		# 任务这一行从右向左数，第一个为x1常规位置，第二个为x2任务
+		# 进入任务
+		click(x2, 330)
+		sleep(2)
+
+		click(200, 413)
+		sleep(2)
+
+		swipe(1800, 500, 1200, 500)
+		sleep(1)
+		swipe(1800, 500, 1200, 500)
+		sleep(1)
+
+		# choose 从右往左
+
+		def choose_i(i):
+			xx1, xx2, xx3, xx4 = 1680, 1347, 992, 654 
+			if i == 1:
+				return xx1
+			elif i == 2:
+				return xx2
+			elif i == 3:
+				return xx3
+			else:
+				return xx4
+		click(choose_i(baoming_type), 500)
+		sleep(1)
+
+		# 前往
+		click(1540, 968)
+		sleep(2)
+
+		# 报名
+		print("报名")
+		click(1657, 700)
+		sleep(2)
+
+		for i in range(1, 3):
+			back()
+			sleep(1)
+
+	elif baoming_type == 0:
+		# 直接主界面进去
+		click(786, 173)
+		sleep(3)
+
+		# 报名
+		print("报名")
+		click(1657, 700)
+		sleep(2)
+
+		back()
+		sleep(3)
 
 def run(x, y):
 	# 早
@@ -1321,35 +1617,6 @@ def main(df):
 	pool.close()
 	pool.join()
 	'''
-'''
-def task(i):
-	if i == 1:
-		print("hello")
-	elif i == 2:
-		print("Hi")
-	else:
-		print("Fuck")
-	global deviceFlag
-	deviceFlag = i
-	yield deviceFlag
-	print("deviceFlag is: ", deviceFlag)
-	setNO(deviceFlag)
-	print(getNO())
-	for i in range(1, 4):
-		sleep(2)
-		print("deviceFlag is: ", deviceFlag)
-	# connect(NO)
-
-	xList = [1, 8, 16]
-	x = xList[deviceFlag - 1]
-
-	yList = [8, 16, 21]
-	y = yList[deviceFlag - 1]
-
-	zao(x, y)
-
-	# wan(x, y)
-'''
 if __name__ == '__main__':
 	main(deviceFlag)
 
