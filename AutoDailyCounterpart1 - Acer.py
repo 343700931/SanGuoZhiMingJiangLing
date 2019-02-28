@@ -1163,12 +1163,13 @@ def autoCollectClubPieces():
 	x = 1735
 	y1, y2, y3 = 403, 668, 938
 
-	click(x, y1)
-	sleep(0.2)
-	click(x, y2)
-	sleep(0.2)
-	click(x, y3)
-	sleep(0.2)
+	for i in range(1, 3):
+		click(x, y1)
+		sleep(0.2)
+		click(x, y2)
+		sleep(0.2)
+		click(x, y3)
+		sleep(0.2)
 
 	# Big bonus
 	click(659, 663)
